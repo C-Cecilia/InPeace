@@ -1,0 +1,102 @@
+version: '3.9'
+
+services:
+
+  pg-admin:
+    image: dpage/pgadmin4:7.3
+    environment:
+      # Set login information for pg-admin. 
+      # To access pg-admin go to localhost:5050 in your browser and login with the following credentials
+      - PGADMIN_DEFAULT_EMAIL=admin@email.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - "5050:5050"
+    volumes:
+    # Defines the volume where the database will be stored
+      - ./pg-admin/data:/root/.pgadmin
+
+  authentication-service:
+    # This tells Docker to build the image using the Dockerfile located in the ./authentication-service directory.
+    build:
+      context: ./authentication-service
+      dockerfile: Dockerfile
+    image: ghcr.io/group12-inpeace/authentication-service:latest
+    env_file: .env
+
+  user-service:
+    # This tells Docker to build the image using the Dockerfile located in the ./authentication-service directory.
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    image: ghcr.io/group12-inpeace/user-service:latest
+    env_file: .env
+
+  places-service:
+    # This tells Docker to build the image using the Dockerfile located in the ./places-service directory.
+    build:
+      context: ./places-service
+      dockerfile: Dockerfile
+    image: ghcr.io/group12-inpeace/places-service:latest
+    env_file: .env
+
+  community-service:
+    # This tells Docker to build the image using the Dockerfile located in the ./community-service directory.
+    build:
+      context: ./community-service
+      dockerfile: Dockerfile
+    image: ghcr.io/group12-inpeace/community-service:latest
+    env_file: .env
+
+  map-service:
+    # This tells Docker to build the image using the Dockerfile located in the ./map-service directory.
+    build:
+      context: ./map-service
+      dockerfile: Dockerfile
+    image: ghcr.io/group12-inpeace/map-service:latest
+    env_file: .env
+
+  busyness-service:
+    # This tells Docker to build the image using the Dockerfile located in the ./busyness-service directory.
+    build:
+      context: ./busyness-service
+      dockerfile: Dockerfile
+    image: ghcr.io/group12-inpeace/busyness-service:latest
+    env_file: .env
+
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    image: ghcr.io/group12-inpeace/api-gateway:latest
+    env_file: .env
+    depends_on:
+      - authentication-service
+      - places-service
+      - community-service
+      - map-service
+      - busyness-service
+      - user-service
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./_certs:/usr/src/app/certs
+
+  # Front-End React Application
+  front-end:
+    build: ./front-end
+    ports:
+      - "443:443"
+    image: ghcr.io/group12-inpeace/front-end:latest
+    volumes:
+      - ./front-end:/app
+      - ./_certs/fullchain.pem:/etc/ssl/certs/fullchain.pem
+      - ./_certs/privkey.pem:/etc/ssl/private/privkey.pem
+    env_file: .env
+
+volumes:
+  # this declares a named volume to store our database and persist the data when the docker-compose is taken down
+  data:
+
+
