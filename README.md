@@ -2,7 +2,7 @@
 
 A full-stack web application that predicts the busyness of streets and venues across Manhattan, helping users discover quieter spots in New York City. Built with a microservices architecture, machine learning pipeline, and an interactive community board for sharing recommendations.
 
-Developed as a group project for **COMP30830 Software Engineering** at University College Dublin.
+Developed as a group project at University College Dublin.
 
 ---
 
