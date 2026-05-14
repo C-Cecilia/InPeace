@@ -136,6 +136,4 @@ The application will be available at `http://localhost:3000`
 
 ---
 
-## 📜 Academic Integrity
-
-This project was developed as original coursework for COMP30830 at University College Dublin. All code was written by the team members listed above. No external code was reused beyond the documented libraries and APIs. Redistribution is not permitted without consent of all team members.
+All code was written by the team members listed above. No external code was reused beyond the documented libraries and APIs. Redistribution is not permitted without consent of all team members.
